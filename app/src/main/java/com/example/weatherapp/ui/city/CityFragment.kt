@@ -1,5 +1,6 @@
 package com.example.weatherapp.ui.city
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,34 +14,40 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
+import com.example.weatherapp.base.BaseFragment
+import com.example.weatherapp.model.city.CityDataModel
+import com.example.weatherapp.ui.detail_city.DetailCityActivity
 import kotlinx.android.synthetic.main.fragment_city.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CityFragment : Fragment() {
+class CityFragment : BaseFragment(R.layout.fragment_city) {
 
     private lateinit var searchEditText: EditText
     private lateinit var searchRecyclerView: RecyclerView
     private lateinit var searchRecyclerViewAdapter: CityAdapter
     private val viewModel: CityViewModel by viewModel()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        val view: View? = inflater.inflate(R.layout.fragment_city, container, false)
-        view?.let { bindView(it) }
+    override fun initViews(view: View) {
+        bindView(view)
         searchCity()
-        return view
+    }
+
+    override fun loadingStatus() {
+
     }
 
     private fun bindView(view: View) {
         searchEditText = view.findViewById(R.id.search_edit_text)
         searchRecyclerView = view.findViewById(R.id.city_recycler)
         searchRecyclerView.layoutManager = LinearLayoutManager(context)
-        searchRecyclerViewAdapter = CityAdapter()
+        searchRecyclerViewAdapter = CityAdapter(this@CityFragment::onClickItem)
         searchRecyclerView.adapter = searchRecyclerViewAdapter
+    }
+
+    private fun onClickItem(city: CityDataModel) {
+        val intent = Intent(context, DetailCityActivity::class.java)
+        intent.putExtra("city", city.flag)
+        startActivity(intent)
     }
 
 

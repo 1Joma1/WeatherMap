@@ -8,7 +8,7 @@ import com.example.weatherapp.R
 import com.example.weatherapp.model.city.CityDataModel
 import kotlinx.android.synthetic.main.item_city.view.*
 
-class CityAdapter : RecyclerView.Adapter<CityAdapter.ViewHolder>() {
+class CityAdapter(private val function: (CityDataModel) -> Unit) : RecyclerView.Adapter<CityAdapter.ViewHolder>() {
 
     var mList: ArrayList<CityDataModel> = ArrayList()
 
@@ -31,14 +31,18 @@ class CityAdapter : RecyclerView.Adapter<CityAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View =
             LayoutInflater.from(parent.context).inflate(R.layout.item_city, parent, false)
-        return ViewHolder(view)
+        return ViewHolder(view, function)
     }
 
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View, val function: (CityDataModel) -> Unit) : RecyclerView.ViewHolder(itemView) {
         fun bind(city: CityDataModel) {
             itemView.item_city_country_txt.text = city.name
             itemView.item_city_city_txt.text = city.capital
+
+            itemView.setOnClickListener {
+                function(city)
+            }
         }
     }
 }

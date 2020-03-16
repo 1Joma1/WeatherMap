@@ -15,11 +15,11 @@ val appModule = module {
     }
 
     factory {
-        WeatherRepository()
+        WeatherRepository(get())
     }
 
     factory {
-        CitiesRepository()
+        CitiesRepository(get())
     }
 
     viewModel {
